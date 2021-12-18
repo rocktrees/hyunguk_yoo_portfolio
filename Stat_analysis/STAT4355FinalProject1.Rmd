@@ -1,0 +1,521 @@
+---
+title: "STAT 4355 Final Project"
+author: "Gabrielle Allin, Ramesh Kanakala, Hyun Guk Yoo"
+subtitle: This is an R script with the purpose of analyzing Concrete Compressive Strength
+output: html_notebook
+---
+
+### load the data and look at the first few rows
+```{r}
+conc <- read.csv(file = "Concrete_Data_Yeh.csv")
+head(conc)
+```
+
+### Histogram of csMPa
+```{r}
+library(ggplot2)
+ggplot(conc, aes(x=csMPa)) + 
+ geom_histogram(aes(y=..density..), colour="#4D66E1", fill="lightblue")+
+ geom_density(alpha=.2, fill="#E96CEA") + geom_vline(aes(xintercept=mean(csMPa)),
+            color="blue", linetype="dashed", size=1)
+```
+
+### Scatterplots for csMPa vs each Predictor
+```{r}
+library(gridExtra)
+
+s1 <- ggplot(conc, aes(x=cement, y=csMPa)) + 
+  geom_point(shape=18, color="#4D66E1")+
+  geom_smooth(method=lm,  linetype="dashed",
+             color="darkred", fill="#E96CEA")
+
+s2 <- ggplot(conc, aes(x=slag, y=csMPa)) + 
+  geom_point(shape=18, color="#4D66E1")+
+  geom_smooth(method=lm,  linetype="dashed",
+             color="darkred", fill="#E96CEA")
+
+s3 <- ggplot(conc, aes(x=flyash, y=csMPa)) + 
+  geom_point(shape=18, color="#4D66E1")+
+  geom_smooth(method=lm,  linetype="dashed",
+             color="darkred", fill="#E96CEA")
+
+s4 <- ggplot(conc, aes(x=water, y=csMPa)) + 
+  geom_point(shape=18, color="#4D66E1")+
+  geom_smooth(method=lm,  linetype="dashed",
+             color="darkred", fill="#E96CEA")
+
+s5 <- ggplot(conc, aes(x=superplasticizer, y=csMPa)) + 
+  geom_point(shape=18, color="#4D66E1")+
+  geom_smooth(method=lm,  linetype="dashed",
+             color="darkred", fill="#E96CEA")
+
+s6 <- ggplot(conc, aes(x=coarseaggregate, y=csMPa)) + 
+  geom_point(shape=18, color="#4D66E1")+
+  geom_smooth(method=lm,  linetype="dashed",
+             color="darkred", fill="#E96CEA")
+
+s7 <- ggplot(conc, aes(x=fineaggregate, y=csMPa)) + 
+  geom_point(shape=18, color="#4D66E1")+
+  geom_smooth(method=lm,  linetype="dashed",
+             color="darkred", fill="#E96CEA")
+
+s8 <- ggplot(conc, aes(x=age, y=csMPa)) + 
+  geom_point(shape=18, color="#4D66E1")+
+  geom_smooth(method=lm,  linetype="dashed",
+             color="darkred", fill="#E96CEA")
+
+grid.arrange(s1, s2, s3, s4, s5, s6, s7, s8, nrow = 3)
+```
+
+### Build Full Model
+```{r}
+#full model
+lm1 <- lm(csMPa~., data = conc)
+
+#summary with parameter coefficients and other metrics
+summary(lm1)
+
+#variance
+print(paste("Variance: ", sigma(lm1)^2))
+
+#99% confidence interval 
+print("99% Confidence Interval: ")
+confint(lm1,level=0.99)
+
+#prediction on future observations whose csMPa values are identical to data set
+predout <- predict(lm1, conc, interval = "predict", predict.level = .99)
+print("Prediction on identical data: ")
+predout
+```
+
+### Confidence/Prediction Interval Curves for Full Model
+```{r}
+#merge data points and prediction outcome object
+merged <- cbind(conc, predout)
+
+#cement
+#confidence interval curve
+p0 <- ggplot(merged, aes(cement, csMPa)) + geom_point() + stat_smooth(method = lm)
+p0
+#prediction interval curve 
+p00 <- p0 + geom_line(aes(y = lwr), color = "red", linetype = "dashed")+
+geom_line(aes(y = upr), color = "red", linetype = "dashed")
+
+#slag
+#confidence interval curve
+p1 <- ggplot(merged, aes(slag, csMPa)) + geom_point() + stat_smooth(method = lm)
+p1
+#prediction interval curve 
+p11 <- p1 + geom_line(aes(y = lwr), color = "red", linetype = "dashed")+
+geom_line(aes(y = upr), color = "red", linetype = "dashed")
+
+#flyash             
+#confidence interval curve
+p2 <- ggplot(merged, aes(flyash, csMPa)) + geom_point() + stat_smooth(method = lm)
+p2
+#prediction interval curve 
+p22 <- p2 + geom_line(aes(y = lwr), color = "red", linetype = "dashed")+
+geom_line(aes(y = upr), color = "red", linetype = "dashed")
+
+#water             
+#confidence interval curve
+p3 <- ggplot(merged, aes(water, csMPa)) + geom_point() + stat_smooth(method = lm)
+p3
+#prediction interval curve 
+p33 <- p3 + geom_line(aes(y = lwr), color = "red", linetype = "dashed")+
+geom_line(aes(y = upr), color = "red", linetype = "dashed")
+
+#superplasticizer   
+#confidence interval curve
+p4 <- ggplot(merged, aes(superplasticizer, csMPa)) + geom_point() + stat_smooth(method = lm)
+p4
+#prediction interval curve 
+p44 <- p4 + geom_line(aes(y = lwr), color = "red", linetype = "dashed")+
+geom_line(aes(y = upr), color = "red", linetype = "dashed")
+
+#coarseaggregate      
+#confidence interval curve
+p5 <- ggplot(merged, aes(coarseaggregate, csMPa)) + geom_point() + stat_smooth(method = lm)
+p5
+#prediction interval curve 
+p55 <- p5 + geom_line(aes(y = lwr), color = "red", linetype = "dashed")+
+geom_line(aes(y = upr), color = "red", linetype = "dashed")
+
+#fineaggregate        
+#confidence interval curve
+p6 <- ggplot(merged, aes(fineaggregate, csMPa)) + geom_point() + stat_smooth(method = lm)
+p6
+#prediction interval curve 
+p66 <- p6 + geom_line(aes(y = lwr), color = "red", linetype = "dashed")+
+geom_line(aes(y = upr), color = "red", linetype = "dashed")
+
+#age                        
+#confidence interval curve
+p7 <- ggplot(merged, aes(age, csMPa)) + geom_point() + stat_smooth(method = lm)
+p7
+#prediction interval curve 
+p77 <- p7 + geom_line(aes(y = lwr), color = "red", linetype = "dashed")+
+geom_line(aes(y = upr), color = "red", linetype = "dashed")
+
+#grid.arrange(p0, p00, p1, p11, p2, p22, p3, p33, p4, p44, p5, p55, p6, p66, p7, p77, nrow = 8)
+```
+
+### Residual Analysis for Full Model
+```{r}
+#View(lm1)
+library(MASS)
+
+#standardized residuals
+print("standardized residuals:")
+stdres(lm1)
+barplot(height = stdres(lm1), names.arg = 1:1030, 
+        main = "Standardized Residuals", xlab = "Index", 
+        ylab = "Standardized Resid", ylim=c(-4,4))
+#Add cutoff values. Either 2 or 3 can be chosen.
+abline(h=3, col = "Red", lwd=2)
+abline(h=-3, col = "Red", lwd=2)
+
+#studentized residuals
+print("studentized residuals:")
+studres(lm1)
+barplot(height = studres(lm1), names.arg = 1:1030, 
+        main = "Studentized Residuals", xlab = "Index", 
+        ylab = "Studentized Resid", ylim=c(-5,5))
+#Add cutoff values. Either 2 or 3 can be chosen.
+abline(h=3, col = "Red", lwd=3)
+abline(h=-3, col = "Red", lwd=3)
+
+#R-student residuals
+print("R-student residuals:")
+RStudent <- rstudent(lm1)
+RStudent
+barplot(height = RStudent, names.arg = 1:1030, 
+        main = "R Student Residuals", xlab = "Index", 
+        ylab = "R Student Resid", ylim=c(-5,5))
+cor.level <- 0.05/(2*25)
+cor.qt <- qt(cor.level, 21, lower.tail=F) 
+RStudent> cor.qt
+abline(h=cor.qt , col = "Red", lwd=3)
+abline(h=-cor.qt , col = "Red", lwd=3)
+```
+
+### Diagnostics for Leverage and Influence for Full Model
+```{r}
+#influential analysis
+myInf <- influence.measures(lm1)
+myInf
+summary(myInf)
+
+library(car)
+dfbetasPlots(lm1,intercept=T)
+influenceIndexPlot(lm1)
+
+#variance inflation factors
+vif(lm1)
+
+# histogram of residuals
+hist(studres(lm1), breaks= 10, freq = F, col = "cornflowerblue", cex.axis = 1.5, cex.lab = 1.5)
+
+#normal probability plot of residuals
+qqPlot(lm1)
+
+#plot of the residuals versus the fitted values
+par(mfrow=c(1,1))
+residualPlot(lm1, type="rstudent", quadratic=F, col = "dodgerblue", 
+             pch=16, cex=1.5, cex.axis=1.5, cex.lab=1.5, ylim=c(-3.5,3.5), main = "Res_plot")
+
+```
+
+### Transformed
+```{r}
+# transformed data
+conc_sqrt <- data.frame(x=(conc[,1:8]), y=sqrt(conc[,9]))
+
+# transformed model
+lm_sqrt <- lm(y~., data = conc_sqrt)
+
+# histogram of transformed residuals
+hist(studres(lm_sqrt), breaks= 10, freq = F, col = "cornflowerblue", cex.axis = 1.5, cex.lab = 1.5 )
+
+#normal probability plot of residuals
+qqPlot(lm_sqrt, main = "lm1_sqrt")
+
+#plot of the residuals versus the fitted values
+par(mfrow=c(1,1))
+residualPlot(lm_sqrt, type="rstudent", quadratic=F, col = "dodgerblue", 
+             pch=16, cex=1.5, cex.axis=1.5, cex.lab=1.5, ylim=c(-3.5,3.5), main = "Sqrt_Res_plot_lm1")
+
+```
+### Forward/Backward/Stepwise Selection
+```{r}
+#library(tidyverse)
+library(caret)
+library(MASS)
+
+# Stepwise regression model
+step.model <- stepAIC(lm1, direction = "both", 
+                      trace = FALSE)
+summary(step.model)
+
+# Forward regression model
+forw.model <- stepAIC(lm1, direction = "forward", 
+                      trace = FALSE)
+summary(forw.model)
+
+# Backward regression model
+back.model <- stepAIC(lm1, direction = "backward", 
+                      trace = FALSE)
+summary(back.model)
+
+anova(step.model, forw.model, back.model)
+```
+
+### Density Graph Comparison
+```{r}
+# Density Graph for original data
+ggplot(conc, aes(x=csMPa)) + 
+ geom_histogram(aes(y=..density..), colour="#4D66E1", fill="lightblue")+
+ geom_density(alpha=.2, fill="#E96CEA") + geom_vline(aes(xintercept=mean(csMPa)), color="blue", linetype="dashed", size=1)+ geom_text(mapping = aes(x = mean(csMPa), y = 0, label = round(mean(csMPa), 2), hjust = 1, vjust = 1), size = 8) + xlab("Concrete Compression Strength(Megapascal)")
+
+# Density Graph for tranformed data
+ggplot(conc_sqrt, aes(x=y)) + 
+ geom_histogram(aes(y=..density..), colour="#4D66E1", fill="lightblue")+
+ geom_density(alpha=.2, fill="#E96CEA") + geom_vline(aes(xintercept=mean(y)), color="blue", linetype="dashed", size=1)+ geom_text(mapping = aes(x = mean(y), y = 0, label = round(mean(y), 2), hjust = 1, vjust = 1), size = 8)+ xlab("Square root of Concrete Compression Strength(Megapascal)")
+
+# % difference b/w mean and median for original data
+print((1 - mean(conc$csMPa)/median(conc$csMPa))*100)
+
+# % difference b/w mean and median for original data
+print((1 - mean(conc_sqrt$y)/median(conc_sqrt$y))*100)
+```
+
+### Build Reduced Model
+```{r}
+#reduced model
+lm2 <- lm(csMPa~cement+slag+flyash+water+age, data = conc)
+
+#summary with parameter coefficients and other metrics
+summary(lm2)
+
+#variance
+print(paste("Variance: ", sigma(lm2)^2))
+
+#99% confidence interval 
+print("99% Confidence Interval: ")
+confint(lm2,level=0.99)
+
+#prediction on future observations whose csMPa values are identical to data set
+predout2 <- predict(lm2, conc, interval = "predict", predict.level = .99)
+print("Prediction on identical data: ")
+predout2
+```
+
+### Confidence/Prediction Interval Curves for Reduced Model
+```{r}
+#merge data points and prediction outcome object
+merged2 <- cbind(conc, predout2)
+
+#cement
+#confidence interval curve
+p0 <- ggplot(merged2, aes(cement, csMPa)) + geom_point() + stat_smooth(method = lm)
+p0
+#prediction interval curve 
+p00 <- p1 + geom_line(aes(y = lwr), color = "red", linetype = "dashed")+
+geom_line(aes(y = upr), color = "red", linetype = "dashed")
+
+#slag
+#confidence interval curve
+p1 <- ggplot(merged2, aes(slag, csMPa)) + geom_point() + stat_smooth(method = lm)
+p1
+#prediction interval curve 
+p11 <- p1 + geom_line(aes(y = lwr), color = "red", linetype = "dashed")+
+geom_line(aes(y = upr), color = "red", linetype = "dashed")
+
+#flyash             
+#confidence interval curve
+p2 <- ggplot(merged2, aes(flyash, csMPa)) + geom_point() + stat_smooth(method = lm)
+p2
+#prediction interval curve 
+p22 <- p2 + geom_line(aes(y = lwr), color = "red", linetype = "dashed")+
+geom_line(aes(y = upr), color = "red", linetype = "dashed")
+
+#water             
+#confidence interval curve
+p3 <- ggplot(merged2, aes(water, csMPa)) + geom_point() + stat_smooth(method = lm)
+p3
+#prediction interval curve 
+p33 <- p3 + geom_line(aes(y = lwr), color = "red", linetype = "dashed")+
+geom_line(aes(y = upr), color = "red", linetype = "dashed")
+
+#age                        
+#confidence interval curve
+p7 <- ggplot(merged2, aes(age, csMPa)) + geom_point() + stat_smooth(method = lm)
+p7
+#prediction interval curve 
+p77 <- p7 + geom_line(aes(y = lwr), color = "red", linetype = "dashed")+
+geom_line(aes(y = upr), color = "red", linetype = "dashed")
+
+#grid.arrange(p0, p00, p1, p11, p2, p22, p3, p33, p7, p77, nrow = 7)
+```
+
+### Residual Analysis for Reduced Model
+```{r}
+#View(lm2)
+library(MASS)
+
+#standardized residuals
+print("standardized residuals:")
+stdres(lm2)
+barplot(height = stdres(lm2), names.arg = 1:1030, 
+        main = "Standardized Residuals", xlab = "Index", 
+        ylab = "Standardized Resid", ylim=c(-4,4))
+#Add cutoff values. Either 2 or 3 can be chosen.
+abline(h=3, col = "Red", lwd=2)
+abline(h=-3, col = "Red", lwd=2)
+
+#studentized residuals
+print("studentized residuals:")
+studres(lm2)
+barplot(height = studres(lm2), names.arg = 1:1030, 
+        main = "Studentized Residuals", xlab = "Index", 
+        ylab = "Studentized Resid", ylim=c(-5,5))
+#Add cutoff values. Either 2 or 3 can be chosen.
+abline(h=3, col = "Red", lwd=3)
+abline(h=-3, col = "Red", lwd=3)
+
+#R-student residuals
+print("R-student residuals:")
+RStudent <- rstudent(lm2)
+RStudent
+barplot(height = RStudent, names.arg = 1:1030, 
+        main = "R Student Residuals", xlab = "Index", 
+        ylab = "R Student Resid", ylim=c(-5,5))
+cor.level <- 0.05/(2*25)
+cor.qt <- qt(cor.level, 21, lower.tail=F) 
+RStudent> cor.qt
+abline(h=cor.qt , col = "Red", lwd=3)
+abline(h=-cor.qt , col = "Red", lwd=3)
+```
+
+### Diagnostics for Leverage and Influence for Reduced Model
+```{r}
+#influential analysis
+myInf2 <- influence.measures(lm2)
+myInf2
+summary(myInf2)
+
+library(car)
+dfbetasPlots(lm2,intercept=T)
+influenceIndexPlot(lm2)
+
+#variance inflation factors
+vif(lm2)
+
+#normal probability plot of residuals
+qqPlot(lm2)
+
+#plot of the residuals versus the fitted values
+par(mfrow=c(1,1))
+residualPlot(lm2, type="rstudent", quadratic=F, col = "dodgerblue",
+             pch=16, cex=1.5, cex.axis=1.5, cex.lab=1.5)
+```
+
+### ANOVA
+```{r}
+anova(lm1, lm2)
+```
+
+### Pearson Correlation Heat Map
+```{r}
+concrete_data <- read.csv("concrete_data.csv")
+
+names(concrete_data) = c('cement_component','blast_furnace_slag','fly_ash','water','superplasticizer', 'coarse_aggregate','fine_aggregate','age','compressive_strength')
+
+# install.packages("reshape2")
+library(reshape2)
+library(ggplot2)
+
+# compute correlation matrix
+conc <- round(cor(concrete_data),2)
+head(conc)
+
+# create the correlation heatmap
+library(reshape2)
+melted_conc <- melt(conc)
+head(melted_conc)
+
+library(ggplot2)
+ggplot(data = melted_conc, aes(x=Var1, y=Var2, fill=value)) + 
+  geom_tile()
+
+# Get lower triangle of the correlation matrix
+  get_lower_tri<-function(conc){
+    conc[upper.tri(conc)] <- NA
+    return(conc)
+  }
+  
+# Get upper triangle of the correlation matrix
+  get_upper_tri <- function(conc){
+    conc[lower.tri(conc)]<- NA
+    return(conc)
+  }
+  
+upper_tri <- get_upper_tri(conc)
+
+# Melt the correlation matrix
+library(reshape2)
+melted_conc <- melt(upper_tri, na.rm = TRUE)
+
+# Heatmap
+library(ggplot2)
+ggplot(data = melted_conc, aes(Var2, Var1, fill = value))+
+ geom_tile(color = "white")+
+ scale_fill_gradient2(low = "blue", high = "red", mid = "white", 
+   midpoint = 0, limit = c(-1,1), space = "Lab", 
+   name="Pearson\nCorrelation") +
+  theme_minimal()+ 
+ theme(axis.text.x = element_text(angle = 45, vjust = 1, 
+    size = 12, hjust = 1))+
+ coord_fixed()
+
+reorder_conc <- function(conc){
+# Use correlation between variables as distance
+dd <- as.dist((1-conc)/2)
+hc <- hclust(dd)
+conc <- conc[hc$order, hc$order]
+}
+
+# Reorder the correlation matrix
+conc <- reorder_cormat(conc)
+upper_tri <- get_upper_tri(conc)
+
+# Melt the correlation matrix
+melted_conc <- melt(upper_tri, na.rm = TRUE)
+
+# Create a ggheatmap
+ggheatmap <- ggplot(melted_conc, aes(Var2, Var1, fill = value))+
+ geom_tile(color = "white")+
+ scale_fill_gradient2(low = "red", high = "green", mid = "white",
+   midpoint = 0, limit = c(-1,1), space = "Lab",
+    name="Pearson\nCorrelation") +
+  theme_minimal()+ # minimal theme
+ theme(axis.text.x = element_text(angle = 45, vjust = 1,
+    size = 12, hjust = 1))+
+ coord_fixed()
+
+# add correlation coefficients on the heatmap
+ggheatmap + 
+geom_text(aes(Var2, Var1, label = value), color = "black", size = 4) +
+theme(axis.title.x = element_blank(),
+      axis.title.y = element_blank(),
+      panel.grid.major = element_blank(),
+      panel.border = element_blank(),
+      panel.background = element_blank(),
+      axis.ticks = element_blank(),
+      legend.justification = c(1, 0),
+      legend.position = c(0.6, 0.7),
+      legend.direction = "horizontal")+
+      guides(fill = guide_colorbar(barwidth = 7, barheight = 1,
+                    title.position = "top", title.hjust = 0.5))
+```
+
