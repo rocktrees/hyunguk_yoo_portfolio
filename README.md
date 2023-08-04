@@ -14,7 +14,7 @@ I created a custom [Kmeans library](https://github.com/rocktrees/6375Assignment3
 2.  save a log
 3.  save a SSE vs K plot
 
-It is written in python with a focus on OOP and easy to use.
+It is written in python with a focus on OOP and ease of use
 
 ### Statistical Analysis(concrete strength)
 I have done a detailed statistical analysis on [concrete strenth](https://github.com/rocktrees/ConcreteStrength.git)
