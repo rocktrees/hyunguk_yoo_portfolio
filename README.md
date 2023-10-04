@@ -6,14 +6,14 @@ Have fun,
 
 Josh Yoo
 
-### BART(Language Model) Fine-tuning
-[Fine-tuned BART](https://github.com/rocktrees/CS6301.git) to do question generation on a korean dataset.
+### [BART(Language Model) Fine-tuning](https://github.com/rocktrees/CS6301.git)
+Fine-tuned BART to do question generation on a korean dataset.
 
 The twist here is that BART's original training dataset was primarily english, but it was able to work
 better than I thought on korean data with alittle fine-tuning.
 
-### Kmeans from scratch
-I created a custom [Kmeans library](https://github.com/rocktrees/6375Assignment3.git) that is able to 
+### [Kmeans from scratch](https://github.com/rocktrees/6375Assignment3.git)
+I created a custom Kmeans library that is able to 
 
 1.  (ofcourse)work properly
 2.  save a log
