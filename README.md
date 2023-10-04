@@ -21,5 +21,5 @@ I created a custom [Kmeans library](https://github.com/rocktrees/6375Assignment3
 
 It is written in python with a focus on OOP and ease of use
 
-### Statistical Analysis(concrete strength)
-I have done a detailed statistical analysis on [concrete strenth](https://github.com/rocktrees/ConcreteStrength.git)
+### [Statistical Analysis(concrete strength)](https://github.com/rocktrees/ConcreteStrength.git)
+I have done a detailed statistical analysis on concrete strenth
