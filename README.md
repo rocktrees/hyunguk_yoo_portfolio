@@ -7,7 +7,7 @@ Have fun,
 Josh Yoo
 
 ### [Yooco AI](https://yooco.ai)
-I co-founded a startup that aims to improve customer retention by prividing AI textual analysis. 
+I co-founded a startup that aims to improve customer retention by providing AI textual analysis. 
 
 ### [BART(Language Model) Fine-tuning](https://github.com/rocktrees/CS6301.git)
 Fine-tuned BART to do question generation on a korean dataset.
