@@ -1,6 +1,6 @@
 ## Welcome! 
 
-I have made this my designated "table of contents" of my public work for anyone interesting in looking!
+I have made this my designated "table of contents" of my public work for anyone interested in looking!
 
 Have fun,
 
