@@ -9,6 +9,9 @@ Josh Yoo
 ### [Yooco AI](https://yooco.ai)
 I co-founded a startup that aims to improve customer retention by providing AI textual analysis. 
 
+### [Story Writer](https://github.com/rocktrees/StoryWriter.git)
+Your very own writing companion! With a few key point of a dream you pictured, you can now create a full cohesive story thats extremely exciting to read! Try it out!
+
 ### [BART(Language Model) Fine-tuning](https://github.com/rocktrees/CS6301.git)
 Fine-tuned BART to do question generation on a korean dataset.
 
