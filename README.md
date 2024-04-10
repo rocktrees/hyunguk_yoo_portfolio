@@ -7,7 +7,7 @@ Have fun,
 Josh Yoo
 
 ### [Autobuddy](https://autobuddy.yooco.ai)
-Building an AI car mechanic! It is specifically designed to answer any questions regarding your specific car. This can include diagnosis, repair instructions, and helping you understand a repair bill. By taking into account the skill level of the user, Autobuddy can be sure to explain in a level that makes sense to them.
+Building an AI car mechanic! It's designed to answer any questions regarding your specific car. This can include diagnosis, repair instructions, and understanding a quote/bill. Autobuddy can take the skill level of the user into account so that the answer makes sense to them
 
 ### [Yooco AI](https://yooco.ai)
 I co-founded a startup that aims to improve customer retention by providing AI textual analysis. 
